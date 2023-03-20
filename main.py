@@ -12,4 +12,3 @@ client = Client(school=instituion)
 usercode = client.get_user(token=access_token)["response"]["data"][0]["code"]
 print(usercode)
 print (client.get_liveschedule(token=access_token, week=str(current_year)+str(current_week), usercode=int(usercode)))
-
