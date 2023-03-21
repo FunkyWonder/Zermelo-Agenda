@@ -1,9 +1,19 @@
 import datetime
 from client import Client
+import yaml
 
 access_token = ""
 
-instituion = "csghetstreek"
+with open("config.yaml", "r") as configuration_file:
+    config = yaml.safe_load(configuration_file)
+
+if config == None:
+    raise ValueError("config.yaml is empty! Please fill in your credentials")
+
+if "institution" in config and not config["institution"] == None:
+    instituion = config["institution"]
+else:
+    raise ValueError("institution not defined")
 
 current_year = datetime.date.today().year
 current_week = datetime.date.today().isocalendar()[1]
