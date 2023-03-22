@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 config.yaml
-token.json
+credentials.json
