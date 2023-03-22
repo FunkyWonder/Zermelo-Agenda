@@ -1,2 +1,4 @@
 ## Rename to config.yaml
-institution: "csghetstreek"
+institution: "yourschool"
+access_token: ""
+connect_code: ""
