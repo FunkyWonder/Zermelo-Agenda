@@ -2,6 +2,8 @@ import yaml
 import pathlib
 from gcsa.google_calendar import GoogleCalendar
 from os.path import exists
+from concurrent.futures import TimeoutError
+from pebble import concurrent
 
 def load_config():
     with open("config.yaml", "r") as configuration_file:
@@ -18,6 +20,10 @@ def get_variable(config, variable):
     else:
         raise ValueError(f"{variable} not defined")
 
+@concurrent.process(timeout=60)
+def create_process(path):
+    return GoogleCalendar(credentials_path=path)
+
 def init_gcalendar():
     dir_path = pathlib.Path(__file__).parent.resolve()
     filename = "credentials.json"
@@ -25,5 +31,13 @@ def init_gcalendar():
 
     if not exists(full_path):
         raise ValueError(f"File: {full_path} doesn't exist!")
-        
-    return GoogleCalendar(credentials_path=full_path)
+
+    try:
+        process = create_process(full_path)
+        gc = process.result()
+    except TimeoutError:
+        print("User hasn't authenticated in 60 seconds")
+
+    return gc
+
+print(init_gcalendar())
